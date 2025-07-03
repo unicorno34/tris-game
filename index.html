@@ -45,8 +45,8 @@
       text-shadow: 2px 2px 6px rgba(0,0,0,0.4);
     }
     .by {
-font-size: 0.8rem;     
-  margin-bottom: 5px;
+      font-size: 0.8rem;
+      margin-bottom: 5px;
       font-weight: 400;
       letter-spacing: 1px;
     }
@@ -56,8 +56,8 @@ font-size: 0.8rem;
       display: flex;
       justify-content: center;
       align-items: center;
-width: 45px; 
-  height: 45px;                             /* PRIMA era 110px */
+      width: 45px;
+      height: 45px;
     }
     .logo4 img {
       max-width: 40px;
@@ -68,28 +68,28 @@ width: 45px;
     .mode-selector, .difficulty-selector {
       display: flex;
       justify-content: center;
-      gap: 18px;
-      margin-bottom: 25px;
+      gap: 9px;
+      margin-bottom: 12px;
       flex-wrap: wrap;
     }
-    button {
+    button, .mode-btn, .difficulty-btn {
       cursor: pointer;
       border-radius: 30px;
       border: 2px solid rgba(255,255,255,0.4);
       background: rgba(255,255,255,0.15);
       color: white;
       font-weight: 600;
-      padding: 12px 28px;
-      font-size: 1rem;
+      padding: 6px 12px;
+      font-size: 0.7rem;
       transition: all 0.3s ease;
       user-select: none;
-      min-width: 110px;
+      min-width: 55px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
     button:hover:not(.active) {
       background: rgba(255,255,255,0.35);
       border-color: rgba(255,255,255,0.7);
-      transform: translateY(-3px);
+      transform: translateY(-2px);
       box-shadow: 0 8px 20px rgba(0,0,0,0.3);
     }
     button.active {
@@ -97,18 +97,18 @@ width: 45px;
       color: #4a3fbd;
       border-color: white;
       box-shadow: 0 6px 25px rgba(74,63,189,0.7);
-      transform: translateY(-2px);
+      transform: translateY(-1px);
     }
-   #game {
-  display: grid;
-  grid-template-columns: repeat(3, 60px);   /* PRIMA era 120px */
-  grid-template-rows: repeat(3, 60px);      /* PRIMA era 120px */
-  gap: 9px;                                 /* PRIMA era 18px */
-  margin-bottom: 18px;
-  margin-top: 5px;
-  justify-content: center;
-  align-items: center;
-}
+    #game {
+      display: grid;
+      grid-template-columns: repeat(3, 60px);
+      grid-template-rows: repeat(3, 60px);
+      gap: 9px;
+      margin-bottom: 18px;
+      margin-top: 5px;
+      justify-content: center;
+      align-items: center;
+    }
     .cell {
       background: rgba(255,255,255,0.95);
       border-radius: 12px;
@@ -124,7 +124,7 @@ width: 45px;
       height: 60px;
     }
     .cell:hover:not(.disabled) {
-      transform: scale(1.1);
+      transform: scale(1.07);
       box-shadow: 0 12px 35px rgba(0,0,0,0.4);
       z-index: 1;
     }
@@ -143,19 +143,19 @@ width: 45px;
       margin: 0 auto;
     }
     #status {
-      font-size: 1.5rem;
+      font-size: 0.8rem;
       font-weight: 600;
-      margin-bottom: 25px;
+      margin-bottom: 10px;
       text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
-      min-height: 2em;
+      min-height: 1.2em;
       user-select: none;
       text-align: center;
     }
     #reset {
       background: linear-gradient(45deg, #ff6b6b, #ee5a24);
       border: none;
-      padding: 15px 40px;
-      font-size: 1.2rem;
+      padding: 8px 18px;
+      font-size: 0.8rem;
       font-weight: 700;
       border-radius: 30px;
       box-shadow: 0 6px 20px rgba(0,0,0,0.3);
@@ -163,42 +163,57 @@ width: 45px;
       transition: all 0.3s;
       user-select: none;
       width: 100%;
-      max-width: 300px;
+      max-width: 120px;
       margin: 0 auto;
       display: block;
     }
     #reset:hover {
-      transform: translateY(-3px);
+      transform: translateY(-2px);
       box-shadow: 0 10px 30px rgba(0,0,0,0.45);
     }
     @media (max-width: 480px) {
       #game {
-        grid-template-columns: repeat(3, 90px);
-        grid-template-rows: repeat(3, 90px);
-        gap: 14px;
+        grid-template-columns: repeat(3, 40px);
+        grid-template-rows: repeat(3, 40px);
+        gap: 5px;
       }
       .cell {
-        width: 90px;
-        height: 90px;
+        width: 40px;
+        height: 40px;
       }
       .cell img {
-        max-width: 70px;
-        max-height: 70px;
+        max-width: 28px;
+        max-height: 28px;
       }
       .container {
-        padding: 20px 5px 20px 5px;
+        padding: 8px 2px 8px 2px;
         max-width: 98vw;
       }
       .logo4 {
-        width: 80px;
-        height: 80px;
+        width: 25px;
+        height: 25px;
       }
       .logo4 img {
-        max-width: 70px;
-        max-height: 70px;
+        max-width: 22px;
+        max-height: 22px;
       }
       .title {
-        font-size: 2rem;
+        font-size: 1rem;
+      }
+      button, .mode-btn, .difficulty-btn {
+        min-width: 30px;
+        padding: 4px 8px;
+        font-size: 0.6rem;
+      }
+      #reset {
+        max-width: 60px;
+        padding: 5px 10px;
+        font-size: 0.6rem;
+      }
+      #status {
+        font-size: 0.6rem;
+        margin-bottom: 5px;
+        min-height: 1em;
       }
     }
   </style>
@@ -208,7 +223,7 @@ width: 45px;
     <div class="title">TIC TAC TOE</div>
     <div class="by">by</div>
     <div class="logo4">
-      <img src="logo4.png" alt="Logo 4" />
+      <img src="logo4.jpg" alt="Logo 4" />
     </div>
     <div class="mode-selector" role="group" aria-label="Seleziona modalità di gioco">
       <button class="mode-btn active" onclick="setMode('pvp')" aria-pressed="true">👥 2 Giocatori</button>
@@ -231,9 +246,9 @@ width: 45px;
 
     // Percorsi dei loghi
     const logos = [
-      'logo1.png',
-      'logo2.png',
-      'logo3.png'
+      'logo1.jpg',
+      'logo2.jpg',
+      'logo3.jpg'
     ];
 
     let currentPlayer = "X";
