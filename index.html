@@ -2,172 +2,215 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Gioco del Tris con Loghi</title>
   <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
+    /* Reset e base */
+    * {
+      box-sizing: border-box;
+    }
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    /* Contenitore principale */
+    .container {
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 25px;
+      padding: 40px 50px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(15px);
+      max-width: 420px;
+      width: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      margin: 0;
-      padding: 20px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
     }
-    .container {
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 20px;
-      padding: 30px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-    }
+
     h1 {
-      color: #fff;
-      margin-bottom: 20px;
-      text-align: center;
-      font-size: 2.5rem;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      font-size: 2.8rem;
+      margin-bottom: 30px;
+      text-shadow: 2px 2px 6px rgba(0,0,0,0.4);
+      user-select: none;
     }
-    .mode-selector {
+
+    /* Selettori modalità e difficoltà */
+    .mode-selector, .difficulty-selector {
       display: flex;
-      gap: 15px;
       justify-content: center;
+      gap: 18px;
       margin-bottom: 25px;
+      flex-wrap: wrap;
     }
-    .mode-btn {
-      padding: 12px 20px;
-      font-size: 1rem;
-      background: rgba(255, 255, 255, 0.2);
-      color: white;
-      border: 2px solid rgba(255, 255, 255, 0.3);
-      border-radius: 25px;
+
+    button {
       cursor: pointer;
+      border-radius: 30px;
+      border: 2px solid rgba(255, 255, 255, 0.4);
+      background: rgba(255, 255, 255, 0.15);
+      color: white;
+      font-weight: 600;
+      padding: 12px 28px;
+      font-size: 1rem;
       transition: all 0.3s ease;
-      backdrop-filter: blur(5px);
+      user-select: none;
+      min-width: 110px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
-    .mode-btn:hover {
-      background: rgba(255, 255, 255, 0.3);
+
+    button:hover:not(.active) {
+      background: rgba(255, 255, 255, 0.35);
+      border-color: rgba(255, 255, 255, 0.7);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    }
+
+    button.active {
+      background: white;
+      color: #4a3fbd;
+      border-color: white;
+      box-shadow: 0 6px 25px rgba(74, 63, 189, 0.7);
       transform: translateY(-2px);
     }
-    .mode-btn.active {
-      background: rgba(255, 255, 255, 0.9);
-      color: #333;
-      border-color: rgba(255, 255, 255, 0.9);
-    }
+
+    /* Griglia del gioco */
     #game {
       display: grid;
       grid-template-columns: repeat(3, 120px);
       grid-template-rows: repeat(3, 120px);
-      gap: 15px;
-      margin: 20px 0;
+      gap: 18px;
+      margin-bottom: 30px;
+      user-select: none;
     }
+
+    /* Celle */
     .cell {
-      width: 120px;
-      height: 120px;
-      background: rgba(255, 255, 255, 0.9);
+      background: rgba(255, 255, 255, 0.95);
       border-radius: 20px;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
       display: flex;
-      align-items: center;
       justify-content: center;
-      font-size: 3rem;
-      font-weight: bold;
+      align-items: center;
       cursor: pointer;
-      transition: all 0.3s ease;
-      color: #333;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      position: relative;
+      overflow: hidden;
     }
-    .cell:hover {
-      transform: scale(1.05);
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+
+    .cell:hover:not(.disabled) {
+      transform: scale(1.1);
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+      z-index: 1;
     }
+
     .cell.disabled {
       cursor: not-allowed;
       opacity: 0.7;
     }
+
+    /* Immagini loghi */
+    .cell img {
+      max-width: 90px;
+      max-height: 90px;
+      pointer-events: none;
+      user-select: none;
+      filter: drop-shadow(0 0 3px rgba(0,0,0,0.3));
+      transition: transform 0.3s ease;
+    }
+
+    /* Stato e reset */
     #status {
-      margin: 20px 0;
-      font-size: 1.4rem;
-      color: #fff;
-      text-align: center;
-      font-weight: 500;
-      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-    }
-    #reset {
-      padding: 15px 30px;
-      font-size: 1.1rem;
-      background: linear-gradient(45deg, #ff6b6b, #ee5a24);
-      color: white;
-      border: none;
-      border-radius: 25px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      font-size: 1.5rem;
       font-weight: 600;
+      margin-bottom: 25px;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+      min-height: 2em;
+      user-select: none;
     }
-    #reset:hover {
-      transform: translateY(-2px);
+
+    #reset {
+      background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+      border: none;
+      padding: 15px 40px;
+      font-size: 1.2rem;
+      font-weight: 700;
+      border-radius: 30px;
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-    }
-    .difficulty-selector {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      margin-bottom: 20px;
-    }
-    .difficulty-btn {
-      padding: 8px 16px;
-      font-size: 0.9rem;
-      background: rgba(255, 255, 255, 0.2);
       color: white;
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      border-radius: 20px;
-      cursor: pointer;
       transition: all 0.3s ease;
+      user-select: none;
+      width: 100%;
+      max-width: 300px;
     }
-    .difficulty-btn:hover {
-      background: rgba(255, 255, 255, 0.3);
+
+    #reset:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
     }
-    .difficulty-btn.active {
-      background: rgba(255, 255, 255, 0.8);
-      color: #333;
-    }
+
+    /* Responsive */
     @media (max-width: 480px) {
       #game {
         grid-template-columns: repeat(3, 90px);
         grid-template-rows: repeat(3, 90px);
-        gap: 10px;
+        gap: 14px;
       }
       .cell {
         width: 90px;
         height: 90px;
-        font-size: 2.5rem;
+      }
+      .cell img {
+        max-width: 70px;
+        max-height: 70px;
       }
       h1 {
         font-size: 2rem;
+        margin-bottom: 20px;
+      }
+      button {
+        min-width: 90px;
+        padding: 10px 20px;
+        font-size: 0.9rem;
+      }
+      #reset {
+        max-width: 100%;
       }
     }
   </style>
 </head>
 <body>
-  <div class="container">
+  <div class="container" role="main" aria-label="Gioco del Tris con Loghi">
     <h1>🎮 Gioco del Tris con Loghi</h1>
-    <div class="mode-selector">
-      <button class="mode-btn active" onclick="setMode('pvp')">👥 2 Giocatori</button>
-      <button class="mode-btn" onclick="setMode('ai')">🤖 vs Computer</button>
+
+    <div class="mode-selector" role="group" aria-label="Seleziona modalità di gioco">
+      <button class="mode-btn active" onclick="setMode('pvp')" aria-pressed="true">👥 2 Giocatori</button>
+      <button class="mode-btn" onclick="setMode('ai')" aria-pressed="false">🤖 vs Computer</button>
     </div>
-    <div class="difficulty-selector" id="difficultySelector" style="display: none;">
-      <button class="difficulty-btn active" onclick="setDifficulty('easy')">Facile</button>
-      <button class="difficulty-btn" onclick="setDifficulty('medium')">Medio</button>
-      <button class="difficulty-btn" onclick="setDifficulty('hard')">Difficile</button>
+
+    <div class="difficulty-selector" id="difficultySelector" style="display: none;" role="group" aria-label="Seleziona difficoltà">
+      <button class="difficulty-btn active" onclick="setDifficulty('easy')" aria-pressed="true">Facile</button>
+      <button class="difficulty-btn" onclick="setDifficulty('medium')" aria-pressed="false">Medio</button>
+      <button class="difficulty-btn" onclick="setDifficulty('hard')" aria-pressed="false">Difficile</button>
     </div>
-    <div id="game"></div>
-    <div id="status">Tocca a X</div>
-    <button id="reset">🔄 Nuova Partita</button>
+
+    <div id="game" role="grid" aria-label="Griglia del gioco del tris"></div>
+
+    <div id="status" aria-live="polite" aria-atomic="true">Tocca a X</div>
+
+    <button id="reset" aria-label="Nuova partita">🔄 Nuova Partita</button>
   </div>
+
   <script>
     const game = document.getElementById("game");
     const status = document.getElementById("status");
@@ -197,8 +240,13 @@
 
     function setMode(mode) {
       gameMode = mode;
-      document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.mode-btn').forEach(btn => {
+        btn.classList.remove('active');
+        btn.setAttribute('aria-pressed', 'false');
+      });
       event.target.classList.add('active');
+      event.target.setAttribute('aria-pressed', 'true');
+
       if (mode === 'ai') {
         difficultySelector.style.display = 'flex';
       } else {
@@ -209,8 +257,12 @@
 
     function setDifficulty(diff) {
       difficulty = diff;
-      document.querySelectorAll('.difficulty-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.difficulty-btn').forEach(btn => {
+        btn.classList.remove('active');
+        btn.setAttribute('aria-pressed', 'false');
+      });
       event.target.classList.add('active');
+      event.target.setAttribute('aria-pressed', 'true');
       resetGame();
     }
 
@@ -363,8 +415,6 @@
             const img = document.createElement("img");
             img.src = cellLogos[index];
             img.alt = "Logo";
-            img.style.maxWidth = "80px";
-            img.style.maxHeight = "80px";
             div.appendChild(img);
           }
         }
