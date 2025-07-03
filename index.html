@@ -3,49 +3,68 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Gioco del Tris con Loghi</title>
+  <title>TIC TAC TOE</title>
   <style>
-    /* Reset e base */
-    * {
-      box-sizing: border-box;
-    }
-    body, html {
+    html, body {
+      height: 100%;
       margin: 0;
       padding: 0;
-      height: 100%;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       color: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
       min-height: 100vh;
-      padding: 20px;
+      width: 100vw;
     }
-
-    /* Contenitore principale */
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+      padding: 0;
+    }
     .container {
-      background: rgba(255, 255, 255, 0.12);
+      background: rgba(255,255,255,0.12);
       border-radius: 25px;
-      padding: 40px 50px;
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+      padding: 40px 50px 30px 50px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.4);
       backdrop-filter: blur(15px);
       max-width: 420px;
       width: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
+      margin: 0 auto;
     }
-
-    h1 {
+    .title {
       font-size: 2.8rem;
-      margin-bottom: 30px;
+      margin-bottom: 10px;
+      font-weight: bold;
+      letter-spacing: 2px;
       text-shadow: 2px 2px 6px rgba(0,0,0,0.4);
-      user-select: none;
     }
-
-    /* Selettori modalità e difficoltà */
+    .by {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      font-weight: 400;
+      letter-spacing: 1px;
+    }
+    .logo4 {
+      margin-bottom: 25px;
+      margin-top: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 110px;
+      height: 110px;
+    }
+    .logo4 img {
+      max-width: 100px;
+      max-height: 100px;
+      display: block;
+      margin: 0 auto;
+    }
     .mode-selector, .difficulty-selector {
       display: flex;
       justify-content: center;
@@ -53,12 +72,11 @@
       margin-bottom: 25px;
       flex-wrap: wrap;
     }
-
     button {
       cursor: pointer;
       border-radius: 30px;
-      border: 2px solid rgba(255, 255, 255, 0.4);
-      background: rgba(255, 255, 255, 0.15);
+      border: 2px solid rgba(255,255,255,0.4);
+      background: rgba(255,255,255,0.15);
       color: white;
       font-weight: 600;
       padding: 12px 28px;
@@ -68,68 +86,62 @@
       min-width: 110px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
-
     button:hover:not(.active) {
-      background: rgba(255, 255, 255, 0.35);
-      border-color: rgba(255, 255, 255, 0.7);
+      background: rgba(255,255,255,0.35);
+      border-color: rgba(255,255,255,0.7);
       transform: translateY(-3px);
       box-shadow: 0 8px 20px rgba(0,0,0,0.3);
     }
-
     button.active {
       background: white;
       color: #4a3fbd;
       border-color: white;
-      box-shadow: 0 6px 25px rgba(74, 63, 189, 0.7);
+      box-shadow: 0 6px 25px rgba(74,63,189,0.7);
       transform: translateY(-2px);
     }
-
-    /* Griglia del gioco */
     #game {
       display: grid;
       grid-template-columns: repeat(3, 120px);
       grid-template-rows: repeat(3, 120px);
       gap: 18px;
       margin-bottom: 30px;
-      user-select: none;
+      margin-top: 10px;
+      justify-content: center;
+      align-items: center;
     }
-
-    /* Celle */
     .cell {
-      background: rgba(255, 255, 255, 0.95);
+      background: rgba(255,255,255,0.95);
       border-radius: 20px;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.25);
       display: flex;
       justify-content: center;
       align-items: center;
       cursor: pointer;
-      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      transition: transform 0.25s, box-shadow 0.25s;
       position: relative;
       overflow: hidden;
+      width: 120px;
+      height: 120px;
     }
-
     .cell:hover:not(.disabled) {
       transform: scale(1.1);
-      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 12px 35px rgba(0,0,0,0.4);
       z-index: 1;
     }
-
     .cell.disabled {
       cursor: not-allowed;
       opacity: 0.7;
     }
-
-    /* Immagini loghi */
     .cell img {
       max-width: 90px;
       max-height: 90px;
       pointer-events: none;
       user-select: none;
       filter: drop-shadow(0 0 3px rgba(0,0,0,0.3));
-      transition: transform 0.3s ease;
+      transition: transform 0.3s;
+      display: block;
+      margin: 0 auto;
     }
-
-    /* Stato e reset */
     #status {
       font-size: 1.5rem;
       font-weight: 600;
@@ -137,8 +149,8 @@
       text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
       min-height: 2em;
       user-select: none;
+      text-align: center;
     }
-
     #reset {
       background: linear-gradient(45deg, #ff6b6b, #ee5a24);
       border: none;
@@ -146,20 +158,19 @@
       font-size: 1.2rem;
       font-weight: 700;
       border-radius: 30px;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
       color: white;
-      transition: all 0.3s ease;
+      transition: all 0.3s;
       user-select: none;
       width: 100%;
       max-width: 300px;
+      margin: 0 auto;
+      display: block;
     }
-
     #reset:hover {
       transform: translateY(-3px);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.45);
     }
-
-    /* Responsive */
     @media (max-width: 480px) {
       #game {
         grid-template-columns: repeat(3, 90px);
@@ -174,59 +185,61 @@
         max-width: 70px;
         max-height: 70px;
       }
-      h1 {
+      .container {
+        padding: 20px 5px 20px 5px;
+        max-width: 98vw;
+      }
+      .logo4 {
+        width: 80px;
+        height: 80px;
+      }
+      .logo4 img {
+        max-width: 70px;
+        max-height: 70px;
+      }
+      .title {
         font-size: 2rem;
-        margin-bottom: 20px;
-      }
-      button {
-        min-width: 90px;
-        padding: 10px 20px;
-        font-size: 0.9rem;
-      }
-      #reset {
-        max-width: 100%;
       }
     }
   </style>
 </head>
 <body>
   <div class="container" role="main" aria-label="Gioco del Tris con Loghi">
-    <h1>🎮 Gioco del Tris con Loghi</h1>
-
+    <div class="title">TIC TAC TOE</div>
+    <div class="by">by</div>
+    <div class="logo4">
+      <img src="logo4.jpg" alt="Logo 4" />
+    </div>
     <div class="mode-selector" role="group" aria-label="Seleziona modalità di gioco">
       <button class="mode-btn active" onclick="setMode('pvp')" aria-pressed="true">👥 2 Giocatori</button>
       <button class="mode-btn" onclick="setMode('ai')" aria-pressed="false">🤖 vs Computer</button>
     </div>
-
     <div class="difficulty-selector" id="difficultySelector" style="display: none;" role="group" aria-label="Seleziona difficoltà">
       <button class="difficulty-btn active" onclick="setDifficulty('easy')" aria-pressed="true">Facile</button>
       <button class="difficulty-btn" onclick="setDifficulty('medium')" aria-pressed="false">Medio</button>
       <button class="difficulty-btn" onclick="setDifficulty('hard')" aria-pressed="false">Difficile</button>
     </div>
-
     <div id="game" role="grid" aria-label="Griglia del gioco del tris"></div>
-
     <div id="status" aria-live="polite" aria-atomic="true">Tocca a X</div>
-
     <button id="reset" aria-label="Nuova partita">🔄 Nuova Partita</button>
   </div>
-
   <script>
     const game = document.getElementById("game");
     const status = document.getElementById("status");
     const resetBtn = document.getElementById("reset");
     const difficultySelector = document.getElementById("difficultySelector");
 
-    // Percorsi dei loghi (modifica i nomi se necessario)
+    // Percorsi dei loghi
     const logos = [
-      'logo1.png',
-      'logo2.png',
-      'logo3.png'
+      'logo1.jpg',
+      'logo2.jpg',
+      'logo3.jpg'
     ];
 
     let currentPlayer = "X";
     let cells = Array(9).fill(null);
     let cellLogos = Array(9).fill(null);
+    let assignedLogos = { X: null, O: null };
     let gameActive = true;
     let gameMode = 'pvp';
     let difficulty = 'easy';
@@ -246,7 +259,6 @@
       });
       event.target.classList.add('active');
       event.target.setAttribute('aria-pressed', 'true');
-
       if (mode === 'ai') {
         difficultySelector.style.display = 'flex';
       } else {
@@ -264,6 +276,13 @@
       event.target.classList.add('active');
       event.target.setAttribute('aria-pressed', 'true');
       resetGame();
+    }
+
+    function assignLogos() {
+      // Assegna due loghi diversi casuali a X e O all'inizio della partita
+      let available = [...logos];
+      assignedLogos.X = available.splice(Math.floor(Math.random() * available.length), 1)[0];
+      assignedLogos.O = available[Math.floor(Math.random() * available.length)];
     }
 
     function checkWinner() {
@@ -369,9 +388,8 @@
 
     function handleClick(index) {
       if (!gameActive || cells[index] || isAITurn) return;
-      const randomLogo = logos[Math.floor(Math.random() * logos.length)];
-      cellLogos[index] = randomLogo;
       cells[index] = currentPlayer;
+      cellLogos[index] = assignedLogos[currentPlayer];
       render();
       const winner = checkWinner();
       if (winner) return;
@@ -381,9 +399,8 @@
         status.textContent = "🤖 Computer sta pensando...";
         setTimeout(() => {
           const aiMove = getAIMove();
-          const aiLogo = logos[Math.floor(Math.random() * logos.length)];
-          cellLogos[aiMove] = aiLogo;
           cells[aiMove] = 'O';
+          cellLogos[aiMove] = assignedLogos.O;
           render();
           checkWinner();
           currentPlayer = 'X';
@@ -429,6 +446,7 @@
     function resetGame() {
       cells = Array(9).fill(null);
       cellLogos = Array(9).fill(null);
+      assignLogos();
       currentPlayer = "X";
       gameActive = true;
       isAITurn = false;
@@ -441,6 +459,8 @@
     }
 
     resetBtn.addEventListener("click", resetGame);
+    // Prima partita: assegna i loghi
+    assignLogos();
     render();
   </script>
 </body>
